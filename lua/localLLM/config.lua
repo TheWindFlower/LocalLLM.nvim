@@ -6,6 +6,9 @@ M.defaults = {
     window = {
         width = 0.33,
     },
+    statusline = {
+        model_width = 14
+    },
     system = table.concat({
         "You are a coding assistant inside a text editor.",
         "Always respond in valid Markdown.",

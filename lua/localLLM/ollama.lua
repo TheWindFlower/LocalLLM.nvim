@@ -19,13 +19,13 @@ function M.generate(prompt, on_chunk, on_done)
     local pending = ""
     local finished = false
 
-    local function finish(err)
+    local function finish(err, stats)
         if finished then return end
         finished = true
         if id == M.request_id then
             M.job = nil
         end
-        on_done(err)
+        on_done(err, stats)
     end
 
     local function handle_line(line)
@@ -41,7 +41,7 @@ function M.generate(prompt, on_chunk, on_done)
             on_chunk(decoded.response)
         end
         if decoded.done then
-            finish(nil)
+            finish(nil, decoded)
         end
     end
 

@@ -102,15 +102,15 @@ require("localLLM").setup({
 
 ## 🗺️ Roadmap
 
-* [ ] Create the plugin structure and public Lua API
-* [ ] Implement basic Neovim commands
-* [ ] Capture visual selections
-* [ ] Create a dedicated response buffer and split
-* [ ] Connect to the Ollama REST API
-* [ ] Display model responses
-* [ ] Add asynchronous request handling
-* [ ] Implement streaming responses
-* [ ] Add configurable prompts and models
+* [x] Create the plugin structure and public Lua API
+* [x] Implement basic Neovim commands
+* [x] Capture visual selections
+* [x] Create a dedicated response buffer and split
+* [x] Connect to the Ollama REST API
+* [x] Display model responses
+* [x] Add asynchronous request handling
+* [x] Implement streaming responses
+* [x] Add configurable prompts and models
 * [ ] Implement interactive chat
 * [ ] Add error handling and cancellation
 * [ ] Write tests and documentation

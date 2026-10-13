@@ -1,6 +1,6 @@
 local config = require("localLLM.config")
 local M = {}
-
+vim.treesitter.language.register("markdown", "localllm")
 local buf = nil
 local win = nil
 
@@ -13,7 +13,8 @@ local function ensure_buffer()
     vim.bo[buf].buftype = "nofile"
     vim.bo[buf].bufhidden = "hide"
     vim.bo[buf].swapfile = false
-    vim.bo[buf].filetype = "markdown"
+    vim.bo[buf].filetype = "localllm"
+    pcall(vim.treesitter.start, buf, "markdown")
     vim.api.nvim_buf_set_name(buf, "localLLM")
     return buf
 end
@@ -26,33 +27,38 @@ function M.open()
     end
     local prev = vim.api.nvim_get_current_win()
     local width = math.floor(vim.o.columns * config.options.window.width)
-    vim.cmd("botright " ..width.. "vsplit")
+    vim.cmd("botright " .. width .. "vsplit")
     win = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_buf(win, buf)
     vim.wo[win].wrap = true
     vim.wo[win].linebreak = true
+    require("localLLM.statusline").start()
     vim.api.nvim_set_current_win(prev) -- keep focus in the code window
 end
 
 --- Append text at the end of the buffer, without breaking the current line.
 function M.append_text(text)
-  ensure_buffer()
-  local last = vim.api.nvim_buf_line_count(buf) - 1
-  local last_line = vim.api.nvim_buf_get_lines(buf, last, last + 1, false)[1]
-  local new_lines = vim.split(text, "\n", { plain = true })
+    ensure_buffer()
+    local last = vim.api.nvim_buf_line_count(buf) - 1
+    local last_line = vim.api.nvim_buf_get_lines(buf, last, last + 1, false)[1]
+    local new_lines = vim.split(text, "\n", { plain = true })
 
-  vim.api.nvim_buf_set_text(buf, last, #last_line, last, #last_line, new_lines)
+    vim.api.nvim_buf_set_text(buf, last, #last_line, last, #last_line, new_lines)
 
-  -- Keep the view scrolled to the bottom while text streams in.
-  if win and vim.api.nvim_win_is_valid(win) then
-    vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 })
-  end
+    -- Keep the view scrolled to the bottom while text streams in.
+    if win and vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 })
+    end
 end
 
 --- Replace the buffer contents with the given text.
 function M.set_text(text)
     ensure_buffer()
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(text, "\n"))
+end
+
+function M.is_open()
+    return win ~= nil and vim.api.nvim_win_is_valid(win)
 end
 
 return M
