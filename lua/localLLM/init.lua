@@ -9,14 +9,16 @@ function M.setup(opts)
     config.setup(opts)
 end
 
-function M.explain()
+function M.explain(line1, line2)
     line1 = line1 or vim.fn.line(".")
     line2 = line2 or line1
 
     local code = selection.get_lines(line1, line2)
     local filetype = selection.get_filetype()
+    print(code, filetype)
     window.open()
-    window.set_text("Thinking...")
+    window.set_text(code)
+    --print("line1:", line1, "line2:", line2)
 
     local first = true
     ollama.generate(
@@ -24,7 +26,7 @@ function M.explain()
         function(chunk)
             if first then
                 first = false
-                window.set_text("") -- clear "Thinking..."
+                window.set_text("")  -- clear "Thinking..."
             end
             window.append_text(chunk)
         end,
