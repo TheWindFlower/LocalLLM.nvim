@@ -22,6 +22,9 @@ function M.generate(prompt, on_chunk, on_done)
     local function finish(err)
         if finished then return end
         finished = true
+        if id == M.request_id then
+            M.job = nil
+        end
         on_done(err)
     end
 
@@ -80,6 +83,17 @@ function M.generate(prompt, on_chunk, on_done)
             end
         end)
     end)
+end
+
+--- Stop the running request, if any. Returns true if something was cancelled.
+function M.cancel()
+    if not M.job then
+        return false
+    end
+    pcall(function() M.job:kill(15) end)
+    M.job = nil
+    M.request_id = M.request_id + 1 -- makes queued callbacks from the old request bail out
+    return true
 end
 
 return M
