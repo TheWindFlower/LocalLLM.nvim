@@ -47,6 +47,7 @@ function M.generate(prompt, on_chunk, on_done)
 
     local body = vim.json.encode({
         model = config.options.model,
+        system = config.options.system,
         prompt = prompt,
         stream = true,
     })

@@ -1,30 +1,52 @@
 local M = {}
 
 M.defaults = {
-  host = "http://127.0.0.1:11434",
-  model = "hf.co/Olak17/Qwen2.5-Coder-1.5B-Unsensored-DPO-i1-GGUF:q4_k_m",
-  window = {
-    width = 0.25,
-  },
-  prompts = {
-    explain = "Explain the following {filetype} code clearly and concisely. "
-      .. "Describe what it does and point out anything notable.",
-    document = "Write documentation comments for the following {filetype} code, "
-      .. "using the idiomatic doc-comment style for that language. "
-      .. "Return the documented code.",
-    bugs = "Review the following {filetype} code for bugs, edge cases, and "
-      .. "potential problems. List each issue and suggest a fix.",
-    refactor = "Suggest cleaner or more idiomatic ways to write the following "
-      .. "{filetype} code. Show the improved version and explain the changes.",
-    tests = "Write unit tests for the following {filetype} code. "
-      .. "Use the most common testing framework for that language.",
-  },
+    host = "http://127.0.0.1:11434",
+    model = "hf.co/Olak17/Qwen2.5-Coder-1.5B-Unsensored-DPO-i1-GGUF:q4_k_m",
+    window = {
+        width = 0.33,
+    },
+    system = table.concat({
+        "You are a coding assistant inside a text editor.",
+        "Always respond in valid Markdown.",
+        "Put every piece of code in a fenced code block, and always put the language name after the opening fence (for example ```lua).",
+        "Use short headings (##) and bullet points to organize longer answers.",
+        "Use inline `backticks` for identifiers, function names, and file names.",
+        "Be concise. Do not add greetings or closing remarks.",
+    }, " "),
+    prompts = {
+        explain = "Explain the following {filetype} code.\n\n"
+            .. "Structure your answer as:\n"
+            .. "## Summary\nOne or two sentences on what it does.\n"
+            .. "## Walkthrough\nBullet points going through the logic step by step.\n"
+            .. "## Notes\nAnything notable (edge cases, gotchas). Omit this section if there is nothing to say.",
+        document = "Add documentation comments to the following {filetype} code, "
+            .. "using the idiomatic doc-comment style for that language.\n\n"
+            .. "Return the complete documented code in a single fenced code block. "
+            .. "Do not change the logic. After the block, add at most two sentences "
+            .. "about anything you assumed.",
+        bugs = "Review the following {filetype} code for bugs, edge cases, and potential problems.\n\n"
+            .. "For each issue use this format:\n"
+            .. "### <short title>\n"
+            .. "**Problem:** what is wrong and when it happens.\n"
+            .. "**Fix:** a fenced code block with the corrected code.\n\n"
+            .. "If you find no real issues, say so in one sentence instead of inventing some.",
+        refactor = "Suggest improvements to the following {filetype} code.\n\n"
+            .. "Structure your answer as:\n"
+            .. "## Improved version\nA single fenced code block with the full refactored code.\n"
+            .. "## What changed\nBullet points, one per change, with the reason.",
+        tests = "Write unit tests for the following {filetype} code, "
+            .. "using the most common testing framework for that language.\n\n"
+            .. "Return the tests in a single fenced code block, including any needed imports. "
+            .. "Cover normal cases and edge cases. After the block, list what each test covers "
+            .. "in a short bullet list.",
+    },
 }
 
 M.options = vim.deepcopy(M.defaults)
 
 function M.setup(opts)
-  M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
+    M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
 end
 
 return M
