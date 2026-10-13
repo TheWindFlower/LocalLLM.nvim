@@ -28,10 +28,17 @@ function M.open()
     local prev = vim.api.nvim_get_current_win()
     local width = math.floor(vim.o.columns * config.options.window.width)
     vim.cmd("botright " .. width .. "vsplit")
+
     win = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_buf(win, buf)
+
     vim.wo[win].wrap = true
     vim.wo[win].linebreak = true
+    vim.wo[win].number = false
+    vim.wo[win].relativenumber = false
+    vim.wo[win].foldcolumn = "0"
+    vim.wo[win].signcolumn = "no"
+
     require("localLLM.statusline").start()
     vim.api.nvim_set_current_win(prev) -- keep focus in the code window
 end
