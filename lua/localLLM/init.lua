@@ -16,17 +16,27 @@ function M.explain()
     local code = selection.get_lines(line1, line2)
     local filetype = selection.get_filetype()
     window.open()
-    window.set_text(
-        "**filetype:** " .. filetype .. "\n\n```" .. filetype .. "\n" .. code .. "\n```")
-    vim.cmd("redraw") --force a repaint before we block
-    
-      local response, err = ollama.generate_blocking(prompts.explain(code, filetype))
-  if not response then
-    window.set_text("**Error:** " .. err)
-    return
-  end
+    window.set_text("Thinking...")
 
-  window.set_text(response)
+    local first = true
+    ollama.generate(
+        prompts.explain(code, filetype),
+        function(chunk)
+            if first then
+                first = false
+                window.set_text("") -- clear "Thinking..."
+            end
+            window.append_text(chunk)
+        end,
+        function(err)
+            if not err then return end
+            if first then
+                window.set_text("**Error:** " .. err)
+            else
+                window.append_text("\n\n**Error:** " .. err)
+            end
+        end
+    )
 end
 
 return M
