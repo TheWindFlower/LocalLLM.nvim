@@ -46,8 +46,8 @@ M.defaults = {
     },
     inline = {
         context_before = 150, -- lines of code kept above the insertion point
-        context_after = 50, -- lines of code kept below it
-        temperature = 0.2, -- lower = more predictable code
+        context_after = 50,   -- lines of code kept below it
+        temperature = 0.2,    -- lower = more predictable code
         system = table.concat({
             "You are a code generator inside a text editor.",
             "You receive a file containing the marker <INSERT_HERE> and a request.",
@@ -58,10 +58,10 @@ M.defaults = {
             "keep the code commented",
             "and reuse existing functions and variables from the file when relevant.",
         }, " "),
-    input = {
-        width = 50,
-        boder = "rounded",
-},
+        input = {
+            width = 50,
+            boder = "rounded",
+        },
     },
 }
 
