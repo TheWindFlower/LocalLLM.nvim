@@ -55,6 +55,7 @@ M.defaults = {
             "No Markdown, no code fences, no explanations, no greetings.",
             "Do not repeat the surrounding code or the marker.",
             "Match the language, naming, style, and indentation of the surrounding code,",
+            "keep the code commented",
             "and reuse existing functions and variables from the file when relevant.",
         }, " "),
     },

@@ -15,4 +15,7 @@ function M.get_filetype()
     return ft
 end
 
+function M.get_file()
+    return M.get_lines(1, vim.api.nvim_buf_line_count(0))
+end
 return M
