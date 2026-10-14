@@ -44,6 +44,20 @@ M.defaults = {
             .. "Cover normal cases and edge cases. After the block, list what each test covers "
             .. "in a short bullet list.",
     },
+    inline = {
+        context_before = 150, -- lines of code kept above the insertion point
+        context_after = 50, -- lines of code kept below it
+        temperature = 0.2, -- lower = more predictable code
+        system = table.concat({
+            "You are a code generator inside a text editor.",
+            "You receive a file containing the marker <INSERT_HERE> and a request.",
+            "Output ONLY the code that should be inserted at the marker.",
+            "No Markdown, no code fences, no explanations, no greetings.",
+            "Do not repeat the surrounding code or the marker.",
+            "Match the language, naming, style, and indentation of the surrounding code,",
+            "and reuse existing functions and variables from the file when relevant.",
+        }, " "),
+    },
 }
 
 M.options = vim.deepcopy(M.defaults)

@@ -15,3 +15,7 @@ end
 vim.api.nvim_create_user_command("LocalLLMCancel", function()
   require("localLLM").cancel()
 end, { desc = "localLLM: cancel the running request" })
+
+vim.api.nvim_create_user_command("LocalLLMInline", function(opts)
+  require("localLLM").inline(opts.args)
+end, { nargs = "*", desc = "localLLM: generate code at the cursor from a request" })

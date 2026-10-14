@@ -8,7 +8,8 @@ M.request_id = 0
 --- Stream a response from Ollama.
 --- on_chunk(text) is called for each piece of generated text.
 --- on_done(err) is called once at the end; err is nil on success.
-function M.generate(prompt, on_chunk, on_done)
+function M.generate(prompt, on_chunk, on_done, opts)
+    opts = opts or {}
     -- Only one request at a time: kill any previous one.
     if M.job then
         pcall(function() M.job:kill(15) end)
@@ -47,9 +48,10 @@ function M.generate(prompt, on_chunk, on_done)
 
     local body = vim.json.encode({
         model = config.options.model,
-        system = config.options.system,
+        system = opts.system or config.options.system,
         prompt = prompt,
         stream = true,
+        options = opts.options,
     })
 
     M.job = vim.system({

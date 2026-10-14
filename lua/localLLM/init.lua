@@ -3,6 +3,7 @@ local selection = require("localLLM.selection")
 local window = require("localLLM.window")
 local prompts = require("localLLM.prompts")
 local ollama = require("localLLM.ollama")
+local inline = require("localLLM.inline")
 
 local M = {}
 local state = require("localLLM.state")
@@ -13,6 +14,7 @@ end
 
 --- Run a named action (explain, document, ...) on a range of lines.
 function M.run(action, line1, line2)
+    inline.cleanup()
     line1 = line1 or vim.fn.line(".")
     line2 = line2 or line1
 
@@ -55,7 +57,10 @@ end
 function M.cancel()
     if ollama.cancel() then
         state.cancel()
-        window.append_text("\n\n_Cancelled._")
+        local was_inline = inline.cleanup()
+        if not was_inline and window.is_open() then
+            window.append_text("\n\n_Cancelled._")
+        end
     else
         vim.notify("localLLM: nothing to cancel", vim.log.levels.INFO)
     end
@@ -71,5 +76,7 @@ function M.bugs(l1, l2) M.run("bugs", l1, l2) end
 function M.refactor(l1, l2) M.run("refactor", l1, l2) end
 
 function M.tests(l1, l2) M.run("tests", l1, l2) end
+
+function M.inline(request) inline.run(request) end
 
 return M

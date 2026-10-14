@@ -113,6 +113,7 @@ require("localLLM").setup({
 * [x] Add configurable prompts and models
 * [ ] Implement interactive chat
 * [ ] Add error handling and cancellation
+* [ ] Add inline chat request
 * [ ] Write tests and documentation
 * [ ] Prepare a stable release
 
