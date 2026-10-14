@@ -71,8 +71,6 @@ function M.open(on_submit)
     vim.wo[win].colorcolumn = ""
 
 
-    local win = vim.api.nvim_open_win(buf, true, win_opts)
-    vim.wo[win].wrap = false
 
     local closed = false
     local function close()
