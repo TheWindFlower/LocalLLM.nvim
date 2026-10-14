@@ -58,6 +58,10 @@ M.defaults = {
             "keep the code commented",
             "and reuse existing functions and variables from the file when relevant.",
         }, " "),
+    input = {
+        width = 50,
+        boder = "rounded",
+},
     },
 }
 
