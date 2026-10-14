@@ -52,12 +52,12 @@ function M.open(on_submit)
 
         zindex = 50,
 
-        winhighlight = table.concat({
-            "Normal:NormalFloat",
-            "FloatBorder:FloatBorder",
-            "FloatTitle:FloatTitle",
-            "FloatFooter:FloatFooter",
-        }, ","),
+       -- winhighlight = table.concat({
+       --     "Normal:NormalFloat",
+       --     "FloatBorder:FloatBorder",
+       --     "FloatTitle:FloatTitle",
+       --     "FloatFooter:FloatFooter",
+       -- }, ","),
     }
 
     local win = vim.api.nvim_open_win(buf, true, win_opts)
